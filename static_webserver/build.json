@@ -1,6 +1,6 @@
 {
   "variables": {
-    "prefix": "mbeham"
+    "prefix": "afischer"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -19,5 +19,24 @@
     "ami_name": "{{user `prefix`}}-static-{{timestamp}}"
   }],
   "provisioners": [
+    {
+      "type": "file",
+      "source": "assets/index.html",
+      "destination": "/tmp/index.html"
+    },
+    {
+      "type":"shell",
+      "scripts": [
+        "../common/scripts/ubuntu/base.sh",
+        "scripts/install_nginx.sh",
+        "../common/scripts/ubuntu/cleanup.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo cp /tmp/index.html /var/www/html"
+      ]
+    }
   ]
 }
